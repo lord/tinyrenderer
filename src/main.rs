@@ -27,8 +27,8 @@ fn line(img: &mut Img, pos: (i64, i64, i64, i64), color: (u8, u8, u8)) {
 
     let dx = x1 - x0;
     let dy = y1 - y0;
-    let derror = (dy as f64 / dx as f64);
-    let mut error = 0.0;
+    let derror2 = dy.abs() * 2;
+    let mut error2 = 0; // error * dx * 2
 
     let mut y = y0;
     for x in x0..(x1 + 1) {
@@ -37,10 +37,10 @@ fn line(img: &mut Img, pos: (i64, i64, i64, i64), color: (u8, u8, u8)) {
         } else {
             img.put(y as u32, x as u32, color);
         }
-        error += derror;
-        if error > 0.5 {
+        error2 += derror2;
+        if error2 > dx {
             y += if y1 > y0 { 1 } else { -1 };
-            error -= 1.0;
+            error2 -= dx * 2;
         }
     }
 }
