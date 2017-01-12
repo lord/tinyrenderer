@@ -25,15 +25,22 @@ fn line(img: &mut Img, pos: (i64, i64, i64, i64), color: (u8, u8, u8)) {
         (x0, y0, x1, y1)
     };
 
-    for i in x0..x1 {
-        let t = ((i-x0) as f64)/((x1-x0) as f64);
-        let x = x0 as f64 * (1.0-t) + x1 as f64 * t;
-        let y = y0 as f64 * (1.0-t) + y1 as f64 * t;
-        println!("drawing at {} {} with steep {}", x as u32, y as u32, steep);
+    let dx = x1 - x0;
+    let dy = y1 - y0;
+    let derror = (dy as f64 / dx as f64);
+    let mut error = 0.0;
+
+    let mut y = y0;
+    for x in x0..(x1 + 1) {
         if steep {
             img.put(x as u32, y as u32, color);
         } else {
             img.put(y as u32, x as u32, color);
+        }
+        error += derror;
+        if error > 0.5 {
+            y += if y1 > y0 { 1 } else { -1 };
+            error -= 1.0;
         }
     }
 }
