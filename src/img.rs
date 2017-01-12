@@ -15,8 +15,8 @@ impl Img {
         }
     }
 
-    pub fn put(&mut self, x: u32, y: u32, r: u8, g: u8, b: u8) {
-        self.buf.put_pixel(x, y, Rgb([r, g, b]));
+    pub fn put(&mut self, x: u32, y: u32, color: (u8, u8, u8)) {
+        self.buf.put_pixel(x, y, Rgb([color.0, color.1, color.2]));
     }
 
     pub fn save(self) {
