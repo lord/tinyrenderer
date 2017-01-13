@@ -5,3 +5,4 @@ authors = ["Robert Lord <robert@lord.io>"]
 
 [dependencies]
 image = "*"
+wavefront_obj = "5.0.0"

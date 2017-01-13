@@ -4,19 +4,25 @@ use image::{self, ImageBuffer, Rgb};
 
 pub struct Img {
     buf: ImageBuffer<Rgb<u8>, Vec<u8>>,
+    w: u32,
+    h: u32,
 }
 
 impl Img {
-    pub fn new() -> Img {
-        let mut buf = ImageBuffer::new(840, 480);
+    pub fn new(w: u32, h: u32) -> Img {
+        let mut buf = ImageBuffer::new(w, h);
         buf.put_pixel(0, 0, Rgb([0 as u8, 0 as u8, 0 as u8]));
         Img{
             buf: buf,
+            w: w,
+            h: h,
         }
     }
 
     pub fn put(&mut self, x: u32, y: u32, color: (u8, u8, u8)) {
-        self.buf.put_pixel(x, y, Rgb([color.0, color.1, color.2]));
+        if x < self.w && y < self.h {
+            self.buf.put_pixel(x, y, Rgb([color.0, color.1, color.2]));
+        }
     }
 
     pub fn save(self) {

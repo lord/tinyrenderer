@@ -1,12 +1,44 @@
 extern crate image;
 
+extern crate wavefront_obj;
+use wavefront_obj::obj::Primitive;
+
 mod img;
 use img::Img;
 
 fn main() {
-    let mut img = Img::new();
-    line(&mut img, (5, 10, 400, 40), (255, 255, 255));
-    line(&mut img, (10, 5, 40, 400), (255, 0, 0));
+    let w = 1000;
+    let h = 1000;
+    let mut img = Img::new(w, h);
+
+    let file = wavefront_obj::obj::parse(include_str!("../head.wobj").to_string());
+    let obj = file.unwrap().objects.into_iter().next().unwrap();
+    let ref geometries = obj.geometry;
+    let ref vertices = obj.vertices;
+    for geometry in geometries {
+        for shape in &geometry.shapes {
+            match shape.primitive {
+                Primitive::Triangle(a, b, c) => {
+                    let (a, b, c) = (vertices[a.0], vertices[b.0], vertices[c.0]);
+                    for &(start, end) in &[(a,b), (b,c), (c,a)] {
+                        let dim = (
+                            ((start.y - 1.0) * (h as f64) / -2.0) as i64,
+                            ((start.x + 1.0) * (h as f64) / 2.0) as i64,
+                            ((end.y - 1.0) * (h as f64) / -2.0) as i64,
+                            ((end.x + 1.0) * (h as f64) / 2.0) as i64,
+                        );
+                        line(&mut img, dim, (255, 255, 255));
+                    }
+                },
+                Primitive::Line(a, b) =>  {
+
+                },
+                _ => {}
+            }
+            println!("{:?}", shape.primitive);
+        }
+    }
+
     img.save();
 }
 
