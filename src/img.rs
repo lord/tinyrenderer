@@ -21,7 +21,7 @@ impl Img {
 
     pub fn put(&mut self, x: u32, y: u32, color: (u8, u8, u8)) {
         if x < self.w && y < self.h {
-            self.buf.put_pixel(x, y, Rgb([color.0, color.1, color.2]));
+            self.buf.put_pixel(y, x, Rgb([color.0, color.1, color.2]));
         }
     }
 
